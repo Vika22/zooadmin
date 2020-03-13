@@ -1,28 +1,56 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="text-center">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Company</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+        </tr>
+      </thead>
+      <tbody v-for="user in users" :key="user.id">
+        <tr>
+          <th scope="row">{{ user.name }}</th>
+          <td>{{ user.company.name}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.phone}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <HelloWorld />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     HelloWorld
+  },
+  data: () => {
+    return {
+      users: []
+    };
+  },
+  methods: {
+    getUsers() {
+      this.$axios
+        .get("https://jsonplaceholder.typicode.com/users")
+        .then(response => {
+          this.users = response.data;
+          console.log(this.users);
+        });
+    }
+  },
+  created() {
+    this.getUsers();
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
